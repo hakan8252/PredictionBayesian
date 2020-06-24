@@ -1,0 +1,54 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# PredictionBayesian
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+Learn various Bayesian network models using different algorithms and data. These algorithms can be predefined structure learning algorithms in R or they can be written in R and used as input. After learning models, predictions of different variables could be calculated using models. Actual values and estimations are compared using k-fold cross validation. Prediction accuracy of models are tested through ROC curves and AUC values.
+
+## Installation
+
+You can install the released version of PredictionBayesian from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("PredictionBayesian")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+```{r example}
+library(PredictionBayesian)
+## basic example code
+```
+
+What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+
+```{r cars}
+summary(cars)
+```
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
