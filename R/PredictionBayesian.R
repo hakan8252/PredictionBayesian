@@ -14,9 +14,7 @@ globalVariables(c("Algorithm.Names", "Structure.List"))
 #'
 #' @return List of Bayesian network models. Each element of the list is represented by the name of the algorithm.
 #' If the list element is the predefined model, it is named \code{Predefined_Model_1}, \code{Predefined_Model_2}...
-#'
 #' @export
-#'
 #' @importFrom stats na.omit
 #' @importFrom bnlearn bn.fit
 #' @importFrom bnlearn as.grain
@@ -24,74 +22,51 @@ globalVariables(c("Algorithm.Names", "Structure.List"))
 #' @seealso \code{\link[bnlearn]{bn.fit}} \code{\link[bnlearn]{as.grain}}
 #'
 Model_Learning <- function(train.data, algorithm.names = NULL, structure.list = NULL) {
-
   Models <- list()
   Train_Data <- na.omit(train.data)
   Train_Data <- apply(Train_Data, 2, as.factor)
   Train_Data <- as.data.frame(Train_Data, stringsAsFactors = TRUE)
-
   if(!is.null(algorithm.names)) {
     Algorithms <- algorithm.names
 
     for (a in 1:length(Algorithms)) {
-
       model <- Algorithms[[a]](Train_Data)
       modelB <- bn.fit(model, Train_Data, method = "bayes")
       modelgr <- as.grain(modelB)
       Models[[a]] <- modelgr
       names(Models)[a] <- model$learning$algo
       rm(model, modelB, modelgr)
-
     }
-
   }
-
   Model_Expert <- list()
   if(!is.null(structure.list)) {
-
     if(names(structure.list[[1]])[1] == "learning"){
-
       for (b in 1:length(structure.list)) {
-
         Model_GAS <- bn.fit(structure.list[[b]], Train_Data, method = "bayes")
         Model_GAS_Gr  <- as.grain(Model_GAS)
         Model_Expert[[b]] <- Model_GAS_Gr
 
         if(is.null(algorithm.names)) {
-
           Models[[b]] <- Model_GAS_Gr
           names(Models)[b] <- paste("Predefined_Model", b, sep = "_")
-
         }else {
-
           Models[[length(algorithm.names)+b]] <- Model_Expert[[b]]
           names(Models)[length(algorithm.names)+b] <-  paste("Predefined_Model", b, sep = "_")
-
         }
-
       }
-
     }else {
-
       Model_GAS <- bn.fit(structure.list, Train_Data, method = "bayes")
       Model_GAS_Gr  <- as.grain(Model_GAS)
       if(is.null(algorithm.names)){
         Models[[1]] <- Model_GAS_Gr
         names(Models)[1] <- "Predefined_Model"
-
       }else {
-
         Models[[length(algorithm.names)+1]] <- Model_GAS_Gr
         names(Models)[length(algorithm.names)+1] <- "Predefined_Model"
-
       }
-
     }
-
   }
-
   return(Models)
-
 }
 
 
@@ -120,28 +95,19 @@ Model_Learning <- function(train.data, algorithm.names = NULL, structure.list = 
 #'
 #' @examples
 Predictions <- function(test.data, target, query, bn.model, num.iter = 1) {
-
   #Putting the target variable names in same order with the data frame.
   if(length(target) > 1) {
-
     Variable_Names <- target
     sorted_response <- sort(match(target, names(test.data)))
     Variable_Names <- colnames(test.data[,sorted_response])
-
   }else {
-
     Variable_Names <- target
-
   }
-
-
   data <- na.omit(data)
 
   State_Length <- list()
   for (a in 1:length(Variable_Names)) {
-
     State_Length[[a]] <- length(bn.model[[1]]$universe$levels[[Variable_Names[a]]])
-
   }
 
   Number_Of_Rows <- nrow(data)
@@ -149,41 +115,28 @@ Predictions <- function(test.data, target, query, bn.model, num.iter = 1) {
   Prediction <- list()
 
   for (b in 1:length(State_Length)) {
-
     Prediction[[b]] <- list()
-
   }
   #1st index is for each discrete state of variable. 2nd index is for each Bayes model.
   for (d in 1:length(State_Length)) {
-
     for (c in 1:length(bn.model)) {
-
       Prediction[[d]][[c]] <- matrix(NA, ncol = State_Length[[d]], nrow = Number_Of_Rows)
-
     }
   }
 
   for (f in 1:length(Variable_Names)) {
-
     for (g in 1:length(bn.model)) {
-
       for(h in 1:Number_Of_Rows) {
-
         test_data <- test.data[h,]
         test_data <- apply(test_data,2,as.character)
-        Probability_Informative <- information.algorithm(x = test_data, target = Variable_Names[f], query = query, bn.model = bn.model[[g]], num.iter = num.iter)
+        Probability_Informative <- information.algorithm(x = test_data, target = Variable_Names[f],
+                                                         query = query, bn.model = bn.model[[g]], num.iter = num.iter)
         Prediction[[f]][[g]][h,] <- unlist(Probability_Informative)
-
       }
-
       colnames(Prediction[[f]][[g]]) <- names(unlist(Probability_Informative))
-
     }
-
   }
-
   return(Prediction)
-
 }
 
 
@@ -212,15 +165,11 @@ Predictions <- function(test.data, target, query, bn.model, num.iter = 1) {
 Actual.Values <- function(test.data, target, bn.model) {
   #Putting the target variable names in same order with the data frame.
   if(length(target) > 1) {
-
     Variable_Names <- target
     sorted_response <- sort(match(target, names(test.data)))
     Variable_Names <- colnames(test.data[,sorted_response])
-
   }else {
-
     Variable_Names <- target
-
    }
 
   Test_Data <- as.data.frame(test.data, stringsAsFactors = TRUE)
@@ -228,30 +177,20 @@ Actual.Values <- function(test.data, target, bn.model) {
 
   Output_Names <- list()
   for (a in 1:length(Variable_Names)) {
-
     Output_Names[[a]] <- Test_Data[,Variable_Names[a]]
-
   }
 
   Output_States <- list()
   for (b in 1:length(Variable_Names)) {
-
     Output_States[[b]] <- list()
-
   }
 
   for (c in 1:length(Variable_Names)) {
-
     for (d in 1:length(bn.model[[1]]$universe$levels[[Variable_Names[c]]])) {
-
       Output_States[[c]][[d]] = (Output_Names[[c]] == bn.model[[1]]$universe$levels[[Variable_Names[c]]][d])
-
     }
-
   }
-
   return(Output_States)
-
 }
 
 
@@ -280,71 +219,45 @@ Actual.Values <- function(test.data, target, bn.model) {
 #'
 #' @examples
 ROC_Calculation <- function(predictions, a.Values){
-
-
   AUC <- list()
   ROC <- list()
   AUC_ROC <- list()
 
   for (a in 1:length(predictions[[1]])) {
-
     AUC[[a]] <- list()
     ROC[[a]] <- list()
-
   }
-
   for (b in 1:length(predictions[[1]])) {
-
     for (c in 1:length(predictions)) {
-
       AUC[[b]][[c]] <- matrix(nrow = 1, ncol = length(predictions[[c]][[1]][1,]))
       ROC[[b]][[c]] <- list()
-
     }
-
   }
-
-
   for (d in 1:length(predictions[[1]])) {
-
     for (f in 1:length(predictions)) {
-
       for (g in 1:length(predictions[[f]][[1]][1,])) {
-
         if(all(!a.Values[[f]][[g]]) == TRUE) {
-
           AUC[[d]][[f]][,g] = 0
           ROC[[d]][[f]][[g]] = 0
-
         }else {
-
           AUC[[d]][[f]][,g] <- auc(roc(a.Values[[f]][[g]],
                                        predictions[[f]][[d]][,g],
                                        ci = TRUE))
-
           ROC[[d]][[f]][[g]] <- roc(a.Values[[f]][[g]],
                                     predictions[[f]][[d]][,g],
                                     ci = TRUE)
         }
-
       }
-
     }
-
   }
-
   AUC <- t(sapply(sapply(AUC, rbind), rbind))
 
   for (x in 1:2) {
-
     AUC_ROC[[x]] <- list()
-
   }
-
   AUC_ROC[[1]] <- AUC
   AUC_ROC[[2]] <- ROC
   return(AUC_ROC)
-
 }
 
 
@@ -385,7 +298,6 @@ ROC_Calculation <- function(predictions, a.Values){
 #'
 #' @examples
 Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorithms = NULL, structure.list = NULL){
-
   if(length(target) > 1) {
     Variable_Names <- target
     sorted_response <- sort(match(target, names(data.tt)))
@@ -399,22 +311,17 @@ Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorit
 
   CV_Index <- list()
   for (a in 1:fold) {
-
     CV_Index[[a]] <- rep(a, round(nrow(Factorized_data)/fold))
-
   }
 
   CV_Index <- unlist(CV_Index)
   CV_Results <- list()
 
   for (x in 1:fold) {
-
     CV_Results[[x]] <- list()
-
   }
   #Cross validatation loop
   for (k_fold in 1:fold) {
-
     TrainIndex = CV_Index != k_fold
     TestIndex  = CV_Index == k_fold
 
@@ -424,52 +331,38 @@ Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorit
     train_Data <- na.omit(train_Data)
     test_Data <- na.omit(test_Data)
 
-
     Models_K <- Model_Learning(train.data = train_Data, str.algorithms, structure.list)
     Predictions_K <- Predictions(test.data = test_Data, target = Variable_Names, query = input, bn.model = Models_K, num.iter = num.iter)
     Real_Values_K <- Actual.Values(test.data = test_Data, target = Variable_Names, bn.model = Models_K)
     AUROC_K <- ROC_Calculation(Predictions_K, Real_Values_K)
 
     for (b in 1:length(Predictions_K[[1]])) {
-
       for (c in 1:length(Predictions_K)) {
-
         for (d in 1:length(Predictions_K[[c]][[1]][1,])) {
-
           names(AUROC_K[[2]])[b] <- names(Models_K)[b]
           names(AUROC_K[[2]][[b]])[c] <- Variable_Names[c]
           names(AUROC_K[[2]][[b]][[c]])[d] <- Models_K[[1]]$universe$levels[[Variable_Names[c]]][d]
-
         }
-
       }
-
     }
 
     f <- 1
     R_Names <- c()
 
     for (g in 1:length(Models_K)) {
-
       for (h in 1:length(Variable_Names)) {
-
-
         R_Names[f] <- paste(Variable_Names[h], names(Models_K)[g], sep = "_")
         f = f + 1
         if(f == (length(Models_K)*length(Variable_Names)+1))
           break
-
       }
-
     }
 
     rownames(AUROC_K[[1]]) <- R_Names
     C_Names <- list()
 
     for (i in 1:length(Variable_Names)) {
-
       C_Names[[i]] <- Models_K[[1]]$universe$levels[[Variable_Names[i]]]
-
     }
 
     C_Names <- unique(unlist(C_Names))
@@ -480,17 +373,12 @@ Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorit
 
   AUC_Dataframe <- c()
   for (t in 1:fold) {
-
     AUC_Dataframe <- cbind(AUC_Dataframe, CV_Results[[t]][[1]])
-
-
   }
 
   ROC_List <- list()
   for (k in 1:fold) {
-
     ROC_List[[k]] <- CV_Results[[k]][[2]]
-
   }
 
   AUROC <- list()
@@ -498,13 +386,9 @@ Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorit
   AUROC[[2]] <- ROC_List
 
   for (y in 1:fold) {
-
     names(AUROC[[2]])[y] <- paste("Fold", y, sep = "_")
-
   }
-
   return(AUROC)
-
 }
 
 
@@ -528,27 +412,19 @@ Cross_Validation <- function(fold, data.tt, target, input, num.iter, str.algorit
 #'
 #' @examples
 Discretization <- function(vector.d, cutoff.d, states.d = NULL){
-
   Min_D <- min(vector.d)
   Max_D <- max(vector.d)
 
   if(is.null(states.d)){
-
     states.d <- list()
+
     for (a in 1:(length(cutoff.d)+1)) {
-
       states.d[[a]] <- paste("State", a, sep = "_")
-
     }
-
     states.d <- unlist(states.d)
-
   }
-
   Discretized_Vector <- cut(vector.d, breaks = c(Min_D, cutoff.d, Max_D), include.lowest = TRUE, labels = states.d)
-
   return(Discretized_Vector)
-
 }
 
 

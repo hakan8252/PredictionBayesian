@@ -13,7 +13,6 @@
 correction <- function(x, correction_factor = 0.00001){
   x[x == 0] = correction_factor
   x = x / sum(x)
-
 }
 
 
@@ -31,15 +30,12 @@ correction <- function(x, correction_factor = 0.00001){
 #' vector.1 <- c(1,4,5,0)
 #' entropy(vector.1)
 entropy <- function(x) {
-
   total_entropy <- data.frame()
 
   if(any(x == 0)){
     x = correction(x)
   }
-
   total_entropy = - sum(x * log(x))
-
 }
 
 
@@ -63,13 +59,11 @@ entropy <- function(x) {
 #'
 #' @examples
 cond.ent <- function(target, evidence.e, bn.model) {
-
   target_t <- querygrain(bn.model, nodes = c(target), type = "marginal")
   evidence_e_t <- querygrain(bn.model, nodes = c(evidence.e), type = "marginal")
   t_states <- sapply(target_t,length)
   e_states <- length(evidence_e_t[[1]])
   e_state_names <- names(evidence_e_t[[1]])
-
 
   evidence_e_t <- as.data.frame(evidence_e_t)
   evidence_list <- list()
@@ -89,25 +83,17 @@ cond.ent <- function(target, evidence.e, bn.model) {
   for(j in 1:length(target)) {
     evidence_entered_prob <- matrix(NA,nrow=t_states[j],ncol = e_states)
       for(i in 1:e_states) {
-
         # Correction for 0 probabilities
         if(0 %in% evidence_prob[[i]][[j]]){
         evidence_prob[[i]][[j]] = correction(evidence_prob[[i]][[j]])
-
         }
-
       evidence_prob[[i]][[j]]
       evidence_entered_prob[,i] = evidence_prob[[i]][[j]] * log(evidence_prob[[i]][[j]])
-
       }
-
     sum_evidence <- apply(evidence_entered_prob, 2, sum)
     cond_ent[j] = - sum(sum_evidence * evidence_e_t)
-
   }
-
   return(cond_ent)
-
 }
 
 
@@ -132,7 +118,6 @@ cond.ent <- function(target, evidence.e, bn.model) {
 #'
 #' @examples
 mut.inf <- function(target, evidence, bn.model) {
-
   num_ev = length(evidence)
   num_t = length(target)
   mut_i = matrix(NA, ncol=num_ev, nrow=num_t)
@@ -140,32 +125,24 @@ mut.inf <- function(target, evidence, bn.model) {
 
   target_t <- querygrain(bn.model, nodes = c(target), type = "marginal")
   if(length(target) > 1) {
-
     eh <-   sapply(target_t, entropy)
-
-  } else {
-
+  }else {
     target_t_t <- as.numeric(unlist(target_t))
     eh <- entropy(target_t_t)
-
-    }
+   }
 
   for(i in 1:num_ev) {
-
     this_evidence = evidence[i]
     cond <- cond.ent(target, this_evidence, bn.model)
     temp_mut <- eh - cond
     # Match row names
     mut_i[, i] <- temp_mut[match(target,names(target_t))]
-
   }
-
   max_mut <- apply(mut_i,1,max)
   max_mut_ind <- apply(mut_i,1,which.max)
   max_mut_vars <- evidence[max_mut_ind]
   res_eh <- eh[match(target,names(target_t))]
   return(list(marg = target_t, ent = res_eh, max_vars = max_mut_vars, max_mut_vals = max_mut, max_mut_ind = max_mut_ind, mut_df = mut_i))
-
 }
 
 
@@ -190,18 +167,14 @@ mut.inf <- function(target, evidence, bn.model) {
 #'
 #' @examples
 information.algorithm <- function(x, target, query, evidence = NULL, bn.model, num.iter = 1) {
-
   entered_ev <- c()
 
   # Enter Evidence
   if(!is.null(evidence)) {
-
     bn_model <- setEvidence(bn.model, evidence = as.list(evidence))
-
   }
 
   for(i in 1:num.iter){
-
     #Get nodes with maximum mutual information for each target
     mi <- mut.inf(target, query, bn.model)
     entered_ev <- c(entered_ev,unique(mi$max_vars))
@@ -210,12 +183,8 @@ information.algorithm <- function(x, target, query, evidence = NULL, bn.model, n
     #Enter evidence for those nodes and remove them from query nodes
     query_ev <- x[entered_ev]
     bn_model <- setEvidence(bn.model, evidence = as.list(query_ev))
-
-
   }
-
   querygrain(bn_model, nodes = c(target), type = "marginal")
-
 }
 
 
