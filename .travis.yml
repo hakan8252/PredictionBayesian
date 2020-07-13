@@ -2,22 +2,9 @@
 
 language: R
 warnings_are_errors: true
-r: bioc-devel
-bioc_check: true
-sudo: false
+use_bioc: true
 cache: packages
-jobs:
-  include:
-    - stage: prepare cache
-      script: true
-    - stage: test
-r_github_packages:
-  - BUStools/TENxBUSData
 
-
-before_script:
-  - R -e 'BiocManager::install(version = "devel", ask=FALSE)'
-  - R -e 'BiocManager::valid()'
 
 os:
   - linux
