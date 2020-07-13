@@ -270,7 +270,7 @@ ROC_Calculation <- function(predictions, a.Values){
 #' @title Cross Validation Method for Bayesian Network Models
 #' @description This function is used to perform k-fold cross validation method for a Bayesian network models.
 #'
-#' @param fold an integer value shows the fold number.
+#' @param fold an integer value shows the fold number of cross validation.
 #' @param data.tt a data frame containing the variable(s) in the Bayesian network model(s). Values of the variables
 #'                in the data frame are assumed to be discrete.
 #' @param target target variable(s) whose actual values and posterior distributions will be obtained.

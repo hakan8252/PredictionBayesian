@@ -3,9 +3,7 @@
 
 # PredictionBayesian
 
-<!-- badges: start -->
-
-<!-- badges: end -->
+*—* <!-- badges: start --> <!-- badges: end -->
 
 Learn various Bayesian network models using different algorithms and
 data. These algorithms can be predefined structure learning algorithms

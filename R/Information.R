@@ -98,12 +98,14 @@ cond.ent <- function(target, evidence.e, bn.model) {
 
 
 
-#' @title Mutual Information of a Variable
-#' @description Calculate mutual information value of variable(s) in Bayesian network given other variables
+#' @title Mutual Information of Two Variables
+#' @description Calculate mutual information between two variables. These variables are elements of Bayesian network model and Bayesian
+#'              network model is also provided as input.
 #'
-#' @param target variable(s) whose mutual information to be calculated. Variable type is a character.
-#' @param evidence evidence variable(s). Variable type is a character.
-#' @param bn.model Bayesian network model including all variables
+#'
+#' @param target a character vector containing variable(s) whose mutual information to be calculated.
+#' @param evidence a character vector containing evidence variable(s).
+#' @param bn.model Bayesian network model including all variables.
 #'
 #' @return a list containing probability distribution of target variable(s), mutual information between target(s) and evidence variable(s),
 #'         and variable(s) which has maximum mutual information
@@ -150,8 +152,8 @@ mut.inf <- function(target, evidence, bn.model) {
 #' @description  The posterior distribution of the target variable(s) is calculated using the entropy and mutual information values.
 #'
 #' @param x a observation vector containing all variables in Bayesian network as characters. Each row in data frame defined as observation vector.
-#' @param target variable(s) whose posterior distribution to be calculated. Variable type is a character.
-#' @param query input variable(s) to be used when calculating the posterior distribution of target variables. Variable type is a character.
+#' @param target a character vector containing variable(s) whose posterior distribution to be calculated.
+#' @param query a character vector containing input variable(s) to be used when calculating the posterior distribution of target variables.
 #' @param evidence a vector containing observed variables in the Bayesian network. Default value is `NULL`.
 #' @param bn.model Bayesian network model including all variables.
 #' @param num.iter an integer that shows number of query variables which will be used during calculation of
