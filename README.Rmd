@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![Travis build status](https://travis-ci.com/hakan8252/PredictionBayesian.svg?branch=master)](https://travis-ci.com/hakan8252/PredictionBayesian)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/hakan8252/PredictionBayesian?branch=master&svg=true)](https://ci.appveyor.com/project/hakan8252/PredictionBayesian)
 <!-- badges: end -->
 
 Learn various Bayesian network models using different algorithms and data. These algorithms can be predefined structure learning algorithms in R or they can be written in R and used as input. After learning models, predictions of different variables could be calculated using models. Actual values and estimations are compared using k-fold cross validation. Prediction accuracy of models are tested through ROC curves and AUC values.

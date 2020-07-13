@@ -2,7 +2,6 @@
 
 language: R
 warnings_are_errors: true
-use_bioc: true
 cache: packages
 
 
