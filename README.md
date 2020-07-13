@@ -3,7 +3,11 @@
 
 # PredictionBayesian
 
-*—* <!-- badges: start --> <!-- badges: end -->
+<!-- badges: start -->
+
+[![Travis build
+status](https://travis-ci.com/hakan8252/PredictionBayesian.svg?branch=master)](https://travis-ci.com/hakan8252/PredictionBayesian)
+<!-- badges: end -->
 
 Learn various Bayesian network models using different algorithms and
 data. These algorithms can be predefined structure learning algorithms
