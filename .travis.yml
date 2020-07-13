@@ -1,9 +1,15 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
 language: R
-cache: packages
 warnings_are_errors: true
-before_install: R -e 'source("https://install-github.me/r-lib/remotes")'
+r: bioc-devel
+bioc_check: true
+sudo: false
+cache: packages
+
+before_script:
+  - R -e 'BiocManager::install(version = "devel", ask=FALSE)'
+  - R -e 'BiocManager::valid()'
 
 os:
   - linux
