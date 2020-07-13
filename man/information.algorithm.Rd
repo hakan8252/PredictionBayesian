@@ -16,9 +16,9 @@ information.algorithm(
 \arguments{
 \item{x}{a observation vector containing all variables in Bayesian network as characters. Each row in data frame defined as observation vector.}
 
-\item{target}{variable(s) whose posterior distribution to be calculated. Variable type is a character.}
+\item{target}{a character vector containing variable(s) whose posterior distribution to be calculated.}
 
-\item{query}{input variable(s) to be used when calculating the posterior distribution of target variables. Variable type is a character.}
+\item{query}{a character vector containing input variable(s) to be used when calculating the posterior distribution of target variables.}
 
 \item{evidence}{a vector containing observed variables in the Bayesian network. Default value is `NULL`.}
 

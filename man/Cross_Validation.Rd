@@ -15,7 +15,7 @@ Cross_Validation(
 )
 }
 \arguments{
-\item{fold}{an integer value shows the fold number.}
+\item{fold}{an integer value shows the fold number of cross validation.}
 
 \item{data.tt}{a data frame containing the variable(s) in the Bayesian network model(s). Values of the variables
 in the data frame are assumed to be discrete.}

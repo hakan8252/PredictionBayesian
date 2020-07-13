@@ -2,23 +2,24 @@
 % Please edit documentation in R/Information.R
 \name{mut.inf}
 \alias{mut.inf}
-\title{Mutual Information of a Variable}
+\title{Mutual Information of Two Variables}
 \usage{
 mut.inf(target, evidence, bn.model)
 }
 \arguments{
-\item{target}{variable(s) whose mutual information to be calculated. Variable type is a character.}
+\item{target}{a character vector containing variable(s) whose mutual information to be calculated.}
 
-\item{evidence}{evidence variable(s). Variable type is a character.}
+\item{evidence}{a character vector containing evidence variable(s).}
 
-\item{bn.model}{Bayesian network model including all variables}
+\item{bn.model}{Bayesian network model including all variables.}
 }
 \value{
 a list containing probability distribution of target variable(s), mutual information between target(s) and evidence variable(s),
         and variable(s) which has maximum mutual information
 }
 \description{
-Calculate mutual information value of variable(s) in Bayesian network given other variables
+Calculate mutual information between two variables. These variables are elements of Bayesian network model and Bayesian
+             network model is also provided as input.
 }
 \details{
 Multiple target and evidence variables can be defined as vectors provided that the variable type is a character. Mutual information between
